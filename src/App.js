@@ -4,7 +4,7 @@ import {useState} from "react";
 import {buzzWords} from "./extras";
 
 function App() {
-    const [prompt, setPrompt] = useState('a giant butterfly');
+    const [prompt, setPrompt] = useState('');
     const [aspectRatioModifier, setAspectRatioModifier] = useState(false);
     const [heightModifier, setHeightModifier] = useState(false);
     const [widthModifier, setWidthModifier] = useState(false);
