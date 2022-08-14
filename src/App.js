@@ -146,7 +146,7 @@ function App() {
                 {/*Size Modifiers*/}
                 <div>
                     <hr/>
-                    <h3>Size Modifiers</h3>
+                    <h3><a href={'https://midjourney.gitbook.io/docs/imagine-parameters#sizes'} target={'_blank'}>Size Modifiers</a></h3>
                     <div>
                         {/*aspect ratio*/}
                         {aspectRatioModifier && (widthModifier || heightModifier) && <strong className={'error-text'}>You cannot set an aspect ratio and width or height</strong>}
@@ -212,6 +212,7 @@ function App() {
                 <div>
                     <hr/>
                     <h3>Algorithm Modifiers</h3>
+                    <h3><a href={'https://midjourney.gitbook.io/docs/imagine-parameters#algorithm-modifiers'} target={'_blank'}>Algorithm Modifiers</a></h3>
                     <div>
                         {/*version*/}
                         <div>
@@ -244,7 +245,7 @@ function App() {
                 {/*Prompt Modifiers*/}
                 <div>
                     <hr/>
-                    <h3>Prompt Modifiers</h3>
+                    <h3><a href={'https://midjourney.gitbook.io/docs/imagine-parameters#prompt-modifiers'} target={'_blank'}>Prompt Modifiers</a></h3>
                     <div>
                         <input id={'no'} checked={noModifier} onChange={event => {
                             const {checked} = event.target
@@ -265,7 +266,7 @@ function App() {
                 {/*Detail Modifiers*/}
                 <div>
                     <hr/>
-                    <h3>Detail Modifiers</h3>
+                    <h3><a href={'https://midjourney.gitbook.io/docs/imagine-parameters#detail-modifiers'} target={'_blank'}>Detail Modifiers</a></h3>
                     <div>
                         <input id={'stop'} checked={stopModifier} onChange={event => {
                             const {checked} = event.target
@@ -306,7 +307,7 @@ function App() {
                 {/*Seed Modifiers*/}
                 <div>
                     <hr/>
-                    <h3>Seed Modifiers</h3>
+                    <h3><a href={'https://midjourney.gitbook.io/docs/imagine-parameters#seeds'} target={'_blank'}>Seed Modifiers</a></h3>
                     <div>
                         <input id={'seed'} checked={seedModifier} onChange={event => {
                             const {checked} = event.target
@@ -334,7 +335,7 @@ function App() {
                 {/*Stylize Modifiers*/}
                 <div>
                     <hr/>
-                    <h3>Stylize Modifiers</h3>
+                    <h3><a href={'https://midjourney.gitbook.io/docs/imagine-parameters#stylize'} target={'_blank'}>Stylize Modifiers</a></h3>
                     <div>
                         <input id={'stylize'} checked={stylizeModifier} onChange={event => {
                             const {checked} = event.target
@@ -355,7 +356,7 @@ function App() {
                 {/*Quality Modifiers*/}
                 <div>
                     <hr/>
-                    <h3>Quality Modifiers</h3>
+                    <h3><a href={'https://midjourney.gitbook.io/docs/imagine-parameters#quality'} target={'_blank'}>Quality Modifiers</a></h3>
                     <div>
                         <input id={'quality'} checked={qualityModifier} onChange={event => {
                             const {checked} = event.target
@@ -382,7 +383,7 @@ function App() {
                 {/*Other Modifiers*/}
                 <div>
                     <hr/>
-                    <h3>Other</h3>
+                    <h3><a href={'https://midjourney.gitbook.io/docs/imagine-parameters#progress-videos'} target={'_blank'}>Other</a></h3>
                     <div>
                         <input id={'video'} checked={videoModifier} onChange={event => {
                             const {checked} = event.target
@@ -399,7 +400,7 @@ function App() {
             <button onClick={reset} className={'button-accent'}>Reset</button>
         </div>*/}
         <div style={{display:'grid',gridAutoColumns: 'auto', gap:'10px', position: 'fixed', bottom: 25, right: 150, maxWidth: 50}}>
-            <button disabled={aspectRatioModifier && (widthModifier || heightModifier) || !prompt.length} onClick={generatePrompt}>Generate Prompt</button>
+            <button className={'button-success'} disabled={aspectRatioModifier && (widthModifier || heightModifier) || !prompt.length} onClick={generatePrompt}>Generate Prompt</button>
             <button onClick={reset} className={'button-accent'}>Reset</button>
         </div>
 

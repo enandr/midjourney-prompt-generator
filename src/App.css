@@ -23,3 +23,8 @@ div.scrollmenu a:hover {
 .error-text {
   color: red;
 }
+
+.button-success {
+  --button-color: var(--color-dark);
+  --button-background: #66bb6a;
+}
