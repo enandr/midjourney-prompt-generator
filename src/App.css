@@ -19,3 +19,7 @@ div.scrollmenu a:hover {
   background-color: #777;
   cursor: pointer;
 }
+
+.error-text {
+  color: red;
+}

@@ -26,6 +26,10 @@ function App() {
     const [stopPercentage, setStopPercentage] = useState(100);
     const [chosenUpscale, setChosenUpscale] = useState('Regular');
     const [image, setImage] = useState('');
+    const [customAspectRatio, setCustomAspectRatio] = useState('')
+    const [customWidth, setCustomWidth] = useState(0)
+    const [customHeight, setCustomHeight] = useState(0)
+    const [noText, setNoText] = useState('')
 
     const reset = () => {
         setPrompt('');
@@ -49,12 +53,23 @@ function App() {
         setUseModifiers(false);
         setStopPercentage(100);
         setChosenUpscale('Regular');
+        setCustomAspectRatio('')
+        setCustomWidth(0);
+        setCustomHeight(0)
     }
 
     const generatePrompt = async () => {
-        const ar = aspectRatioModifier && chosenAspectRatio !== 'Custom' ? '--ar ' + chosenAspectRatio : '';
-        const imageRef = useImageModifier && image.length ? image + ' ' : '';
-        const finalPrompt = `/imagine prompt:${imageRef}${prompt} ${ar}`;
+        const ar = aspectRatioModifier && chosenAspectRatio !== 'Custom' ? `--ar ${chosenAspectRatio} ` :
+            aspectRatioModifier && chosenAspectRatio === 'Custom' ? `--ar ${customAspectRatio} ` : '';
+        const width = widthModifier && customWidth ? `--w ${customWidth} ` : '';
+        const height = heightModifier && customHeight ? `--h ${customHeight} ` : '';
+        const imageRef = useImageModifier && image.length ? `${image} ` : '';
+        const version = versionModifier ? `--version ${chosenVersion} `: ''
+        const hd = hdModifier ? '--hd ' : ''
+        const no = noModifier && noText.length ? `--no ${noText} ` : '';
+
+        const modifiers = `${ar}${width}${height}${version}${hd}${no}`;
+        const finalPrompt = `/imagine prompt:${imageRef}${prompt} ${modifiers}`;
         await navigator.clipboard.writeText(finalPrompt);
         alert(`"${finalPrompt}" has been copied to your clipboard`);
     }
@@ -117,6 +132,7 @@ function App() {
                     <h3>Size Modifiers</h3>
                     <div>
                         {/*aspect ratio*/}
+                        {aspectRatioModifier && (widthModifier || heightModifier) && <strong className={'error-text'}>You cannot set an aspect ratio and width or height</strong>}
                         <div>
                             <input id={'aspectRatio'} checked={aspectRatioModifier} onChange={event => {
                                 const {checked} = event.target
@@ -137,7 +153,10 @@ function App() {
                                         <option>Custom</option>
                                     </select>
                                     {chosenAspectRatio === 'Custom' && (
-                                        <input type={'text'}/>
+                                        <input value={customAspectRatio} onInput={event => {
+                                            const {value} = event.target;
+                                            setCustomAspectRatio(value)
+                                        }} type={'text'}/>
                                     )}
                                 </>
                             )}
@@ -150,7 +169,10 @@ function App() {
                             }} type={'checkbox'}/>
                             <label htmlFor={'width'}>Width</label>
                             {widthModifier && (
-                                <input type={'number'}/>
+                                <input min={1} value={customWidth} onChange={event => {
+                                    const {value} = event.target;
+                                    setCustomWidth(value)
+                                }} type={'number'}/>
                             )}
                         </div>
                         {/*height*/}
@@ -161,7 +183,10 @@ function App() {
                             }} type={'checkbox'}/>
                             <label htmlFor={'height'}>Height</label>
                             {heightModifier && (
-                                <input type={'number'}/>
+                                <input min={1} value={customHeight} onChange={event => {
+                                    const {value} = event.target;
+                                    setCustomHeight(value)
+                                }}  type={'number'}/>
                             )}
                         </div>
                     </div>
@@ -211,7 +236,10 @@ function App() {
                         <label htmlFor={'no'}>No</label>
                         {noModifier && (
                             <>
-                                <input type={'text'} placeholder={'plants'}/>
+                                <input value={noText} onInput={event => {
+                                    const {value} = event.target;
+                                    setNoText(value);
+                                }} type={'text'} placeholder={'plants'}/>
                                 <small><i>Negative prompting. Attempts to remove what you specify</i></small>
                             </>
                         )}
@@ -344,7 +372,7 @@ function App() {
         )}
         <hr/>
         <div style={{display:'grid',gridAutoColumns: 'auto', gap:'10px'}}>
-            <button onClick={generatePrompt}>Generate Prompt</button>
+            <button disabled={aspectRatioModifier && (widthModifier || heightModifier) || !prompt.length} onClick={generatePrompt}>Generate Prompt</button>
             <button onClick={reset} className={'button-accent'}>Reset</button>
         </div>
 
