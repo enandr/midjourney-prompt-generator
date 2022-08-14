@@ -23,6 +23,32 @@ function App() {
     const [useModifiers, setUseModifiers] = useState(false);
     const [stopPercentage, setStopPercentage] = useState(100);
     const [chosenUpscale, setChosenUpscale] = useState('Regular');
+    const [image, setImage] = useState('');
+
+    const reset = () => {
+        setPrompt('');
+        setAspectRatioModifier(false);
+        setHeightModifier(false);
+        setWidthModifier(false);
+        setChosenAspectRatio('Select One');
+        setChosenVersion('3');
+        setChosenQuality('1');
+        setVersionModifier(false);
+        setHDModifier(false);
+        setNoModifier(false);
+        setStopModifier(false);
+        setUpscaleModifier(false);
+        setSeedModifier(false);
+        setSameSeedModifier(false);
+        setStylizeModifier(false);
+        setQualityModifier(false);
+        setVideoModifier(false);
+        setUseImageModifier(false);
+        setUseModifiers(false);
+        setStopPercentage(100);
+        setChosenUpscale('Regular');
+    }
+
   return (
     <div className="container">
         <h2 className={'text-center'}>MidJourney Prompt Generator</h2>
@@ -42,7 +68,10 @@ function App() {
             <label htmlFor={'useImage'}>Use Image Reference</label>
             {useImageModifier && (
                 <>
-                    <input type={'text'} placeholder={'https://example.com/example.jpg'}/>
+                    <input value={image} onInput={event => {
+                        const {value} = event.target;
+                        setImage(value);
+                    }} type={'text'} placeholder={'https://example.com/example.jpg'}/>
                     <small><i>Add one or more image URLs to your prompt and it will use those images as visual inspiration</i></small>
                 </>
             )}
@@ -265,6 +294,9 @@ function App() {
                                     <option>.5</option>
                                     <option>1</option>
                                     <option>2</option>
+                                    <option>3</option>
+                                    <option>4</option>
+                                    <option>5</option>
                                 </select>
                             </>
                         )}
@@ -287,7 +319,7 @@ function App() {
         <hr/>
         <div style={{display:'grid',gridAutoColumns: 'auto', gap:'10px'}}>
             <button>Generate Prompt</button>
-            <button className={'button-accent'}>Reset</button>
+            <button onClick={reset} className={'button-accent'}>Reset</button>
         </div>
 
     </div>
