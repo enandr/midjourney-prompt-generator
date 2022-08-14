@@ -117,7 +117,7 @@ function App() {
                 setPrompt(value)
             }} type={'text'}/>
             <h5>Buzz Words</h5>
-            <small><i>Click to add or remove</i></small>
+            <small><i>Click to add or remove (scroll to see more)</i></small>
             <div className="scrollmenu">
                 {buzzWords.map((word,index) => {
                     return (
