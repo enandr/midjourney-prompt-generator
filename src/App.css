@@ -28,3 +28,7 @@ div.scrollmenu a:hover {
   --button-color: var(--color-dark);
   --button-background: #66bb6a;
 }
+
+code {overflow-x: auto;
+  white-space: pre-wrap;
+  word-wrap: break-word;}
