@@ -1,6 +1,6 @@
 import logo from './logo.svg';
 import './App.css';
-import {useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {buzzWords} from "./extras";
 
 function App() {
@@ -30,6 +30,12 @@ function App() {
     const [customWidth, setCustomWidth] = useState(0)
     const [customHeight, setCustomHeight] = useState(0)
     const [noText, setNoText] = useState('')
+    const [chosenSeed, setChosenSeed] = useState(1)
+    const promptRef = useRef(null);
+
+    useEffect(() => {
+        promptRef.current.focus()
+    },[])
 
     const reset = () => {
         setPrompt('');
@@ -55,7 +61,10 @@ function App() {
         setChosenUpscale('Regular');
         setCustomAspectRatio('')
         setCustomWidth(0);
-        setCustomHeight(0)
+        setCustomHeight(0);
+        setNoText('');
+        setChosenSeed(1);
+        promptRef.current.focus();
     }
 
     const generatePrompt = async () => {
@@ -67,8 +76,11 @@ function App() {
         const version = versionModifier ? `--version ${chosenVersion} `: ''
         const hd = hdModifier ? '--hd ' : ''
         const no = noModifier && noText.length ? `--no ${noText} ` : '';
+        const stop = stopModifier ? `--stop ${stopPercentage} ` : '';
+        const uplight = upscaleModifier && chosenUpscale === 'Light' ? '--uplight ' : '';
+        const seed = seedModifier && !sameSeedModifier ? `--seed ${chosenSeed} ` : seedModifier && sameSeedModifier ? `--sameseed ${chosenSeed} ` : '';
 
-        const modifiers = `${ar}${width}${height}${version}${hd}${no}`;
+        const modifiers = `${ar}${width}${height}${version}${hd}${no}${stop}${uplight}${seed}`;
         const finalPrompt = `/imagine prompt:${imageRef}${prompt} ${modifiers}`;
         await navigator.clipboard.writeText(finalPrompt);
         alert(`"${finalPrompt}" has been copied to your clipboard`);
@@ -82,7 +94,7 @@ function App() {
         <hr/>
         <h3>Prompt</h3>
         <div>
-            <input placeholder={'Imagine your prompt here'} value={prompt} onInput={(event) => {
+            <input ref={promptRef} placeholder={'Imagine your prompt here'} value={prompt} onInput={(event) => {
                 const {value} = event.target
                 setPrompt(value)
             }} type={'text'}/>
@@ -98,6 +110,7 @@ function App() {
                             } else {
                                 setPrompt(`${prompt}, ${word}`);
                             }
+                            promptRef.current.focus()
                         }}>{word}</a>
                     )
                 })}
@@ -298,7 +311,10 @@ function App() {
                         <label htmlFor={'seed'}>Seed</label>
                         {seedModifier && (
                             <>
-                                <input min={1} type={'number'} placeholder={'29083478902374'}/>
+                                <input value={chosenSeed} onChange={event => {
+                                    const {value} = event.target;
+                                    setChosenSeed(value);
+                                }} min={1} type={'number'} placeholder={'29083478902374'}/>
                                 <small><i>Sets the random seed (an integer), which can sometimes help keep things more steady / reproducible between generations</i></small>
                             </>
                         )}

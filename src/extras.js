@@ -3,6 +3,7 @@ export const extras = [
     'female angel praying to heaven',
 ]
 export const buzzWords = [
+    "in the style of ",
     "steampunk",
     "cyberpunk",
     "hdr",
