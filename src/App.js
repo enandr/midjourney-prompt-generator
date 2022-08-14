@@ -22,7 +22,7 @@ function App() {
     const [qualityModifier, setQualityModifier] = useState(false);
     const [videoModifier, setVideoModifier] = useState(false);
     const [useImageModifier, setUseImageModifier] = useState(false);
-    const [useModifiers, setUseModifiers] = useState(false);
+    const [useModifiers, setUseModifiers] = useState(true);
     const [stopPercentage, setStopPercentage] = useState(100);
     const [chosenUpscale, setChosenUpscale] = useState('Regular');
     const [image, setImage] = useState('');
@@ -31,6 +31,7 @@ function App() {
     const [customHeight, setCustomHeight] = useState(0)
     const [noText, setNoText] = useState('')
     const [chosenSeed, setChosenSeed] = useState(1)
+    const [customStylize, setCustomStylize] = useState(2500)
     const promptRef = useRef(null);
 
     useEffect(() => {
@@ -56,7 +57,7 @@ function App() {
         setQualityModifier(false);
         setVideoModifier(false);
         setUseImageModifier(false);
-        setUseModifiers(false);
+        setUseModifiers(true);
         setStopPercentage(100);
         setChosenUpscale('Regular');
         setCustomAspectRatio('')
@@ -79,8 +80,11 @@ function App() {
         const stop = stopModifier ? `--stop ${stopPercentage} ` : '';
         const uplight = upscaleModifier && chosenUpscale === 'Light' ? '--uplight ' : '';
         const seed = seedModifier && !sameSeedModifier ? `--seed ${chosenSeed} ` : seedModifier && sameSeedModifier ? `--sameseed ${chosenSeed} ` : '';
+        const stylize = stylizeModifier ? `--stylize ${customStylize} `: '';
+        const quality = qualityModifier ? `--quality ${chosenQuality} `: '';
+        const video = videoModifier ? '--video' : '';
 
-        const modifiers = `${ar}${width}${height}${version}${hd}${no}${stop}${uplight}${seed}`;
+        const modifiers = `${ar}${width}${height}${version}${hd}${no}${stop}${uplight}${seed}${stylize}${quality}${video}`;
         const finalPrompt = `/imagine prompt:${imageRef}${prompt} ${modifiers}`;
         await navigator.clipboard.writeText(finalPrompt);
         alert(`"${finalPrompt}" has been copied to your clipboard`);
@@ -339,7 +343,10 @@ function App() {
                         <label htmlFor={'stylize'}>Stylize</label>
                         {stylizeModifier && (
                             <>
-                                <input min={1} type={'number'} placeholder={'2500'}/>
+                                <input value={customStylize} onChange={event => {
+                                    const {value} = event.target;
+                                    setCustomStylize(value);
+                                }} min={1} type={'number'} placeholder={'2500'}/>
                                 <small><i>The stylize argument sets how strong of a 'stylization' your images have, the higher you set it, the more opinionated it will be.</i></small>
                             </>
                         )}
@@ -387,7 +394,11 @@ function App() {
             </>
         )}
         <hr/>
-        <div style={{display:'grid',gridAutoColumns: 'auto', gap:'10px'}}>
+        {/*<div style={{display:'grid',gridAutoColumns: 'auto', gap:'10px'}}>
+            <button disabled={aspectRatioModifier && (widthModifier || heightModifier) || !prompt.length} onClick={generatePrompt}>Generate Prompt</button>
+            <button onClick={reset} className={'button-accent'}>Reset</button>
+        </div>*/}
+        <div style={{display:'grid',gridAutoColumns: 'auto', gap:'10px', position: 'fixed', bottom: 25, right: 150, maxWidth: 50}}>
             <button disabled={aspectRatioModifier && (widthModifier || heightModifier) || !prompt.length} onClick={generatePrompt}>Generate Prompt</button>
             <button onClick={reset} className={'button-accent'}>Reset</button>
         </div>
