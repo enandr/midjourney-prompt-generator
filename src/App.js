@@ -4,7 +4,7 @@ import {useState} from "react";
 import {buzzWords} from "./extras";
 
 function App() {
-    const [prompt, setPrompt] = useState('');
+    const [prompt, setPrompt] = useState('a giant butterfly');
     const [aspectRatioModifier, setAspectRatioModifier] = useState(false);
     const [heightModifier, setHeightModifier] = useState(false);
     const [widthModifier, setWidthModifier] = useState(false);
@@ -51,6 +51,14 @@ function App() {
         setChosenUpscale('Regular');
     }
 
+    const generatePrompt = async () => {
+        const ar = aspectRatioModifier && chosenAspectRatio !== 'Custom' ? '--ar ' + chosenAspectRatio : '';
+        const imageRef = useImageModifier && image.length ? image + ' ' : '';
+        const finalPrompt = `/imagine prompt:${imageRef}${prompt} ${ar}`;
+        await navigator.clipboard.writeText(finalPrompt);
+        alert(`"${finalPrompt}" has been copied to your clipboard`);
+    }
+
   return (
     <div className="container">
         <h2 className={'text-center'}>MidJourney Prompt Generator</h2>
@@ -64,35 +72,20 @@ function App() {
                 setPrompt(value)
             }} type={'text'}/>
             <h5>Buzz Words</h5>
+            <small><i>Click to add or remove</i></small>
             <div className="scrollmenu">
                 {buzzWords.map((word,index) => {
                     return (
                         <a key={index} onClick={() => {
                             if (prompt.includes(`, ${word}`)) {
-                                const newPrompt2 = prompt.replace(`, ${word}`, '')
-                                setPrompt(newPrompt2)
+                                const newPrompt2 = prompt.replace(`, ${word}`, '');
+                                setPrompt(newPrompt2);
                             } else {
-                                setPrompt(`${prompt}, ${word}`)
+                                setPrompt(`${prompt}, ${word}`);
                             }
-
                         }}>{word}</a>
                     )
                 })}
-                {/*<a href="#home">Home</a>
-                <a href="#news">News</a>
-                <a href="#contact">Contact</a>
-                <a href="#about">About</a>
-                <a href="#support">Support</a>
-                <a href="#blog">Blog</a>
-                <a href="#tools">Tools</a>
-                <a href="#base">Base</a>
-                <a href="#custom">Custom</a>
-                <a href="#more">More</a>
-                <a href="#logo">Logo</a>
-                <a href="#friends">Friends</a>
-                <a href="#partners">Partners</a>
-                <a href="#people">People</a>
-                <a href="#work">Work</a>*/}
             </div>
             <input id={'useImage'} checked={useImageModifier} onChange={event => {
                 const {checked} = event.target
@@ -351,7 +344,7 @@ function App() {
         )}
         <hr/>
         <div style={{display:'grid',gridAutoColumns: 'auto', gap:'10px'}}>
-            <button>Generate Prompt</button>
+            <button onClick={generatePrompt}>Generate Prompt</button>
             <button onClick={reset} className={'button-accent'}>Reset</button>
         </div>
 
