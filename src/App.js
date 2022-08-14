@@ -33,10 +33,17 @@ function App() {
     const [chosenSeed, setChosenSeed] = useState(1)
     const [customStylize, setCustomStylize] = useState(2500)
     const promptRef = useRef(null);
+    const [finalPrompt, setFinalPrompt] = useState('')
 
     useEffect(() => {
         promptRef.current.focus()
     },[])
+
+    useEffect(() => {
+        generatePrompt();
+    },[customStylize,chosenSeed,noText,customHeight,customWidth,customAspectRatio,image,chosenUpscale,stopPercentage,useModifiers,useImageModifier
+    ,videoModifier,qualityModifier,stylizeModifier,sameSeedModifier,seedModifier,upscaleModifier,stopModifier,noModifier,hdModifier,versionModifier,
+        chosenQuality,chosenVersion,chosenAspectRatio,widthModifier,heightModifier,aspectRatioModifier,prompt])
 
     const reset = () => {
         setPrompt('');
@@ -68,9 +75,9 @@ function App() {
         promptRef.current.focus();
     }
 
-    const generatePrompt = async () => {
-        const ar = aspectRatioModifier && chosenAspectRatio !== 'Custom' ? `--ar ${chosenAspectRatio} ` :
-            aspectRatioModifier && chosenAspectRatio === 'Custom' ? `--ar ${customAspectRatio} ` : '';
+    const generatePrompt = () => {
+        const ar = aspectRatioModifier && chosenAspectRatio !== 'Custom' && chosenAspectRatio !== 'Select One' ? `--ar ${chosenAspectRatio} ` :
+            aspectRatioModifier && chosenAspectRatio === 'Custom'  ? `--ar ${customAspectRatio} ` : '';
         const width = widthModifier && customWidth ? `--w ${customWidth} ` : '';
         const height = heightModifier && customHeight ? `--h ${customHeight} ` : '';
         const imageRef = useImageModifier && image.length ? `${image} ` : '';
@@ -85,7 +92,10 @@ function App() {
         const video = videoModifier ? '--video' : '';
 
         const modifiers = `${ar}${width}${height}${version}${hd}${no}${stop}${uplight}${seed}${stylize}${quality}${video}`;
-        const finalPrompt = `/imagine prompt:${imageRef}${prompt} ${modifiers}`;
+        setFinalPrompt(`/imagine prompt:${imageRef}${prompt} ${modifiers}`);
+    }
+
+    const copyPrompt = async () => {
         await navigator.clipboard.writeText(finalPrompt);
         alert(`"${finalPrompt}" has been copied to your clipboard`);
     }
@@ -98,6 +108,9 @@ function App() {
         <hr/>
         <h3>Prompt</h3>
         <div>
+            <div>
+                <code onClick={copyPrompt} style={{cursor:'pointer'}}>{finalPrompt}</code>
+            </div>
             <input ref={promptRef} placeholder={'Imagine your prompt here'} value={prompt} onInput={(event) => {
                 const {value} = event.target
                 setPrompt(value)
@@ -398,8 +411,9 @@ function App() {
             <button disabled={aspectRatioModifier && (widthModifier || heightModifier) || !prompt.length} onClick={generatePrompt}>Generate Prompt</button>
             <button onClick={reset} className={'button-accent'}>Reset</button>
         </div>*/}
-        <div style={{display:'grid',gridAutoColumns: 'auto', gap:'10px', position: 'fixed', bottom: 25, right: 150, maxWidth: 50}}>
-            <button className={'button-success'} disabled={aspectRatioModifier && (widthModifier || heightModifier) || !prompt.length} onClick={generatePrompt}>Generate Prompt</button>
+        <div style={{display:'grid',gridAutoColumns: 'auto', gap:'10px', position: 'fixed', bottom: 25, right: 125, maxWidth: 50}}>
+            <button className={'button-success'} disabled={aspectRatioModifier && (widthModifier || heightModifier) || !prompt.length}
+                    onClick={generatePrompt}>Copy Prompt</button>
             <button onClick={reset} className={'button-accent'}>Reset</button>
         </div>
 
