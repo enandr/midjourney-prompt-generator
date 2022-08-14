@@ -1,6 +1,8 @@
 import logo from './logo.svg';
 import './App.css';
 import {useState} from "react";
+import {buzzWords} from "./extras";
+
 function App() {
     const [prompt, setPrompt] = useState('');
     const [aspectRatioModifier, setAspectRatioModifier] = useState(false);
@@ -57,10 +59,41 @@ function App() {
         <hr/>
         <h3>Prompt</h3>
         <div>
-            <input placeholder={'Enter your prompt here'} value={prompt} onInput={(event) => {
+            <input placeholder={'Imagine your prompt here'} value={prompt} onInput={(event) => {
                 const {value} = event.target
                 setPrompt(value)
             }} type={'text'}/>
+            <h5>Buzz Words</h5>
+            <div className="scrollmenu">
+                {buzzWords.map((word,index) => {
+                    return (
+                        <a key={index} onClick={() => {
+                            if (prompt.includes(`, ${word}`)) {
+                                const newPrompt2 = prompt.replace(`, ${word}`, '')
+                                setPrompt(newPrompt2)
+                            } else {
+                                setPrompt(`${prompt}, ${word}`)
+                            }
+
+                        }}>{word}</a>
+                    )
+                })}
+                {/*<a href="#home">Home</a>
+                <a href="#news">News</a>
+                <a href="#contact">Contact</a>
+                <a href="#about">About</a>
+                <a href="#support">Support</a>
+                <a href="#blog">Blog</a>
+                <a href="#tools">Tools</a>
+                <a href="#base">Base</a>
+                <a href="#custom">Custom</a>
+                <a href="#more">More</a>
+                <a href="#logo">Logo</a>
+                <a href="#friends">Friends</a>
+                <a href="#partners">Partners</a>
+                <a href="#people">People</a>
+                <a href="#work">Work</a>*/}
+            </div>
             <input id={'useImage'} checked={useImageModifier} onChange={event => {
                 const {checked} = event.target
                 setUseImageModifier(checked)
