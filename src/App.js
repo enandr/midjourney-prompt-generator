@@ -96,6 +96,7 @@ function App() {
     }
 
     const copyPrompt = async () => {
+        if (aspectRatioModifier && (widthModifier || heightModifier) || !prompt.length) return;
         await navigator.clipboard.writeText(finalPrompt);
         alert(`"${finalPrompt}" has been copied to your clipboard`);
     }
