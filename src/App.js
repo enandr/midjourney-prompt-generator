@@ -211,7 +211,6 @@ function App() {
                 {/*Algorithm Modifiers*/}
                 <div>
                     <hr/>
-                    <h3>Algorithm Modifiers</h3>
                     <h3><a href={'https://midjourney.gitbook.io/docs/imagine-parameters#algorithm-modifiers'} target={'_blank'}>Algorithm Modifiers</a></h3>
                     <div>
                         {/*version*/}
