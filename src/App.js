@@ -414,7 +414,7 @@ function App() {
         </div>*/}
         <div style={{display:'grid',gridAutoColumns: 'auto', gap:'10px', position: 'fixed', bottom: 25, right: 125, maxWidth: 50}}>
             <button className={'button-success'} disabled={aspectRatioModifier && (widthModifier || heightModifier) || !prompt.length}
-                    onClick={generatePrompt}>Copy Prompt</button>
+                    onClick={copyPrompt}>Copy Prompt</button>
             <button onClick={reset} className={'button-accent'}>Reset</button>
         </div>
 
