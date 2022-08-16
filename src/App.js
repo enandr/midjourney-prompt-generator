@@ -132,9 +132,9 @@ function App() {
                 const {value} = event.target
                 setPrompt(value)
             }} type={'text'}/>
-            {/*<h5>Buzz Words</h5>*/}
-            <Collapsible triggerTagName={'h5'} trigger="Buzz Words (click to open)" transitionTime={100}>
-                <small><i>Click to add or remove (scroll to see more)</i></small>
+
+            <Collapsible triggerTagName={'h5'} trigger="Buzz Words (click to open)" transitionTime={100} triggerStyle={{cursor:'pointer'}}>
+                <small><i>Click any to add or remove</i></small>
                 <div className={'buzzWords'}>
                     {buzzWords.map((word,index) => {
                         return (
