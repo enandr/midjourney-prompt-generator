@@ -103,7 +103,7 @@ function App() {
         if ((aspectRatioModifier && (widthModifier || heightModifier)) || !prompt.length) return;
         await navigator.clipboard.writeText(finalPrompt);
         alert(`"${finalPrompt}" has been copied to your clipboard`);
-        await saveHistory(finalPrompt)
+        //await saveHistory(finalPrompt)
     }
 
     const saveHistory = async (prompt) => {
