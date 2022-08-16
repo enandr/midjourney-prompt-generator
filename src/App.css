@@ -7,7 +7,7 @@ div.scrollmenu {
   white-space: nowrap;
 }
 
-div.scrollmenu a {
+div.scrollmenu p {
   display: inline-block;
   color: white;
   text-align: center;
@@ -15,7 +15,7 @@ div.scrollmenu a {
   text-decoration: none;
 }
 
-div.scrollmenu a:hover {
+div.scrollmenu p:hover {
   background-color: #777;
   cursor: pointer;
 }
@@ -32,3 +32,9 @@ div.scrollmenu a:hover {
 code {overflow-x: auto;
   white-space: pre-wrap;
   word-wrap: break-word;}
+.buzzWords {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-auto-rows: auto;
+  gap: 5px;
+}

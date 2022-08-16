@@ -2,6 +2,7 @@ import logo from './logo.svg';
 import './App.css';
 import {useEffect, useRef, useState} from "react";
 import {buzzWords} from "./extras";
+import Collapsible from 'react-collapsible';
 
 function App() {
     const [prompt, setPrompt] = useState('');
@@ -37,6 +38,9 @@ function App() {
 
     useEffect(() => {
         promptRef.current.focus()
+        /*window.addEventListener('scroll', function (event) {
+            //console.log(window.scrollY)
+        }, false);*/
     },[])
 
     useEffect(() => {
@@ -96,9 +100,21 @@ function App() {
     }
 
     const copyPrompt = async () => {
-        if (aspectRatioModifier && (widthModifier || heightModifier) || !prompt.length) return;
+        if ((aspectRatioModifier && (widthModifier || heightModifier)) || !prompt.length) return;
         await navigator.clipboard.writeText(finalPrompt);
         alert(`"${finalPrompt}" has been copied to your clipboard`);
+        await saveHistory(finalPrompt)
+    }
+
+    const saveHistory = async (prompt) => {
+        const history = await loadHistroy() || [];
+        history.push({prompt: prompt})
+        localStorage.setItem('promptHistory',JSON.stringify(history));
+    }
+
+    const loadHistroy = async (key) => {
+        console.log('loading',JSON.parse(localStorage.getItem('promptHistory')))
+        return JSON.parse(localStorage.getItem('promptHistory'));
     }
 
   return (
@@ -116,23 +132,25 @@ function App() {
                 const {value} = event.target
                 setPrompt(value)
             }} type={'text'}/>
-            <h5>Buzz Words</h5>
-            <small><i>Click to add or remove (scroll to see more)</i></small>
-            <div className="scrollmenu">
-                {buzzWords.map((word,index) => {
-                    return (
-                        <a key={index} onClick={() => {
-                            if (prompt.includes(`, ${word}`)) {
-                                const newPrompt2 = prompt.replace(`, ${word}`, '');
-                                setPrompt(newPrompt2);
-                            } else {
-                                setPrompt(`${prompt}, ${word}`);
-                            }
-                            promptRef.current.focus()
-                        }}>{word}</a>
-                    )
-                })}
-            </div>
+            {/*<h5>Buzz Words</h5>*/}
+            <Collapsible triggerTagName={'h5'} trigger="Buzz Words (click to open)" transitionTime={100}>
+                <small><i>Click to add or remove (scroll to see more)</i></small>
+                <div className={'buzzWords'}>
+                    {buzzWords.map((word,index) => {
+                        return (
+                            <button className={prompt.includes(`, ${word}`) && 'button-success'} key={index} onClick={() => {
+                                if (prompt.includes(`, ${word}`)) {
+                                    const newPrompt2 = prompt.replace(`, ${word}`, '');
+                                    setPrompt(newPrompt2);
+                                } else {
+                                    setPrompt(`${prompt}, ${word}`);
+                                }
+                                promptRef.current.focus()
+                            }}>{word}</button>
+                        )
+                    })}
+                </div>
+            </Collapsible>
             <input id={'useImage'} checked={useImageModifier} onChange={event => {
                 const {checked} = event.target
                 setUseImageModifier(checked)
@@ -160,7 +178,7 @@ function App() {
                 {/*Size Modifiers*/}
                 <div>
                     <hr/>
-                    <h3><a href={'https://midjourney.gitbook.io/docs/imagine-parameters#sizes'} target={'_blank'}>Size Modifiers</a></h3>
+                    <h3><a href={'https://midjourney.gitbook.io/docs/imagine-parameters#sizes'} rel="noreferrer" target={'_blank'}>Size Modifiers</a></h3>
                     <div>
                         {/*aspect ratio*/}
                         {aspectRatioModifier && (widthModifier || heightModifier) && <strong className={'error-text'}>You cannot set an aspect ratio and width or height</strong>}
@@ -225,7 +243,7 @@ function App() {
                 {/*Algorithm Modifiers*/}
                 <div>
                     <hr/>
-                    <h3><a href={'https://midjourney.gitbook.io/docs/imagine-parameters#algorithm-modifiers'} target={'_blank'}>Algorithm Modifiers</a></h3>
+                    <h3><a href={'https://midjourney.gitbook.io/docs/imagine-parameters#algorithm-modifiers'} rel="noreferrer" target={'_blank'}>Algorithm Modifiers</a></h3>
                     <div>
                         {/*version*/}
                         <div>
@@ -258,7 +276,7 @@ function App() {
                 {/*Prompt Modifiers*/}
                 <div>
                     <hr/>
-                    <h3><a href={'https://midjourney.gitbook.io/docs/imagine-parameters#prompt-modifiers'} target={'_blank'}>Prompt Modifiers</a></h3>
+                    <h3><a href={'https://midjourney.gitbook.io/docs/imagine-parameters#prompt-modifiers'} rel="noreferrer" target={'_blank'}>Prompt Modifiers</a></h3>
                     <div>
                         <input id={'no'} checked={noModifier} onChange={event => {
                             const {checked} = event.target
@@ -279,7 +297,7 @@ function App() {
                 {/*Detail Modifiers*/}
                 <div>
                     <hr/>
-                    <h3><a href={'https://midjourney.gitbook.io/docs/imagine-parameters#detail-modifiers'} target={'_blank'}>Detail Modifiers</a></h3>
+                    <h3><a href={'https://midjourney.gitbook.io/docs/imagine-parameters#detail-modifiers'} rel="noreferrer" target={'_blank'}>Detail Modifiers</a></h3>
                     <div>
                         <input id={'stop'} checked={stopModifier} onChange={event => {
                             const {checked} = event.target
@@ -320,7 +338,7 @@ function App() {
                 {/*Seed Modifiers*/}
                 <div>
                     <hr/>
-                    <h3><a href={'https://midjourney.gitbook.io/docs/imagine-parameters#seeds'} target={'_blank'}>Seed Modifiers</a></h3>
+                    <h3><a href={'https://midjourney.gitbook.io/docs/imagine-parameters#seeds'} rel="noreferrer" target={'_blank'}>Seed Modifiers</a></h3>
                     <div>
                         <input id={'seed'} checked={seedModifier} onChange={event => {
                             const {checked} = event.target
@@ -348,7 +366,7 @@ function App() {
                 {/*Stylize Modifiers*/}
                 <div>
                     <hr/>
-                    <h3><a href={'https://midjourney.gitbook.io/docs/imagine-parameters#stylize'} target={'_blank'}>Stylize Modifiers</a></h3>
+                    <h3><a href={'https://midjourney.gitbook.io/docs/imagine-parameters#stylize'} rel="noreferrer" target={'_blank'}>Stylize Modifiers</a></h3>
                     <div>
                         <input id={'stylize'} checked={stylizeModifier} onChange={event => {
                             const {checked} = event.target
@@ -369,7 +387,7 @@ function App() {
                 {/*Quality Modifiers*/}
                 <div>
                     <hr/>
-                    <h3><a href={'https://midjourney.gitbook.io/docs/imagine-parameters#quality'} target={'_blank'}>Quality Modifiers</a></h3>
+                    <h3><a href={'https://midjourney.gitbook.io/docs/imagine-parameters#quality'} rel="noreferrer" target={'_blank'}>Quality Modifiers</a></h3>
                     <div>
                         <input id={'quality'} checked={qualityModifier} onChange={event => {
                             const {checked} = event.target
@@ -396,7 +414,7 @@ function App() {
                 {/*Other Modifiers*/}
                 <div>
                     <hr/>
-                    <h3><a href={'https://midjourney.gitbook.io/docs/imagine-parameters#progress-videos'} target={'_blank'}>Other</a></h3>
+                    <h3><a href={'https://midjourney.gitbook.io/docs/imagine-parameters#progress-videos'} rel="noreferrer" target={'_blank'}>Other</a></h3>
                     <div>
                         <input id={'video'} checked={videoModifier} onChange={event => {
                             const {checked} = event.target
@@ -413,7 +431,7 @@ function App() {
             <button onClick={reset} className={'button-accent'}>Reset</button>
         </div>*/}
         <div style={{display:'grid',gridAutoColumns: 'auto', gap:'10px', position: 'fixed', bottom: 25, right: 125, maxWidth: 50}}>
-            <button className={'button-success'} disabled={aspectRatioModifier && (widthModifier || heightModifier) || !prompt.length}
+            <button className={'button-success'} disabled={(aspectRatioModifier && (widthModifier || heightModifier)) || !prompt.length}
                     onClick={copyPrompt}>Copy Prompt</button>
             <button onClick={reset} className={'button-accent'}>Reset</button>
         </div>
